@@ -32,8 +32,8 @@ void cllbck_sub_imu_data(const sbg_driver::SbgImuDataConstPtr &msg)
 {
 
   msg_imu.linear_acceleration.x =  msg->accel.x * 1.0063;
-  msg_imu.linear_acceleration.y =  (- msg->accel.y) * 1.0063;
-  msg_imu.linear_acceleration.z = (- msg->accel.z) * 1.0063;
+  msg_imu.linear_acceleration.y =  (- msg->accel.z) * 1.0063;
+  msg_imu.linear_acceleration.z = (- msg->accel.y) * 1.0063;
 
 
   // msg_imu.linear_acceleration.x = 20;
@@ -55,8 +55,9 @@ void cllbck_sub_ekf_euler(const sbg_driver::SbgEkfEulerConstPtr &msg)
   }  
   
   angle_aligned[0] =  msg->angle.x ;
-  angle_aligned[1] =  - msg->angle.y ;
-  angle_aligned[2] =   atan2f(sinf(msg->angle.z - offsetGYRO[2]),cosf(msg->angle.z - offsetGYRO[2])) ;  
+  angle_aligned[1] =  - atan2f(sinf(msg->angle.z - offsetGYRO[2]),cosf(msg->angle.z - offsetGYRO[2])) ;  
+  angle_aligned[2] =   - msg->angle.y ;
+
   
   tf::quaternionTFToMsg(tf::createQuaternionFromRPY(angle_aligned[0], angle_aligned[1], angle_aligned[2]), msg_imu.orientation);
   ROS_INFO("%f,%f,%f\n\n\n\n",angle_aligned[0] * 57.2958,angle_aligned[1] * 57.2958,angle_aligned[2] * 57.2958);
